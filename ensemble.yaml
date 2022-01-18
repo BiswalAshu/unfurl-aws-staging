@@ -1,0 +1,13 @@
+apiVersion: unfurl/v1alpha1
+kind: Ensemble
++include:
+  file: ensemble-template.yaml
+  repository: spec
+metadata:
+  uri: git-local://d5d981d87a4421f37832214b7a1cb11becf4a212:/ensemble.yaml
+spec:
+  service_template:
+    repositories:
+    # Files that are shared across ensemble instances should be placed in this "spec" repository
+      spec:
+        url: git-local://58194fc160babc2509f6852bc4c0a2915150ba8a:/.
