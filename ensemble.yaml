@@ -1,13 +1,29 @@
 apiVersion: unfurl/v1alpha1
 kind: Ensemble
-+include:
-  file: ensemble-template.yaml
-  repository: spec
-metadata:
-  uri: git-local://d5d981d87a4421f37832214b7a1cb11becf4a212:/ensemble.yaml
 spec:
   service_template:
-    repositories:
-    # Files that are shared across ensemble instances should be placed in this "spec" repository
-      spec:
-        url: git-local://58194fc160babc2509f6852bc4c0a2915150ba8a:/.
+    imports:
+    - repositories: unfurl
+      file: tosca_plugins/artifacts.yml
+    topology_templates:
+      node_templates:
+        terraform-expl:
+          type: unfurl.nodes.Installer.Terraform
+            interfaces:
+              defaults:
+                inputs:
+                  tfvars:
+                    aws_machine_type: t2micro
+                  main: 
+                    resource "aws_instance" "management_instance" {
+                      ami           = var.aws_image
+                      instance_type = var.aws_instance_type
+
+                      tags = {
+                      Name = "Management-Instance"
+                      }
+                      vpc_security_group_ids = [ aws_security_group.allow_all.id ]            
+                      key_name = "myKey1"
+                    } 
+                    
+                    
